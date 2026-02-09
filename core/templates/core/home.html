@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home - Customer List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #d74ae4;
+        }
+        th {
+            background-color: #f0940b;
+            color: rgb(233, 43, 43);
+            padding: 10px;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #dad044;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 5px; 
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .add-btn {
+            background-color: #15e991;
+            color: rgb(255, 0, 0);
+        }
+        .add-btn:hover {
+            background-color: #e9db1b;
+        }
+        .edit-btn {
+            background-color: #2ddb2d;
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            font-size: 12px;
+        }
+        .edit-btn:hover {
+            background-color: #63ca68;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 6px 12px;
+            text-decoration: none;
+            border-radius: 4px;
+            display: inline-block;
+            font-size: 12px;
+        }
+        .delete-btn:hover {
+            background-color: #da190b;
+        }
+        .actions-cell {
+            white-space: nowrap;
+        }
+         .filter-bar {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-end;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    .filter-bar input {
+        width: 140px;
+        padding: 6px 8px;
+        font-size: 13px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .filter-bar button {
+        padding: 6px 14px;
+        font-size: 13px;
+        background-color: #f02f2f;
+        color: rgb(68, 223, 54);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .filter-bar a {
+        padding: 6px 14px;
+        font-size: 13px;
+        background-color: #e0e0e0;
+        color: rgb(0, 0, 0);
+        text-decoration: none;
+        border-radius: 4px;
+    }
+    .filter-bar select {
+    width: 70px;
+    padding: 6px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    
+    }
+    
+    </style>
+    
+</head>
+<body>
+    <h1><div style="display: flex; justify-content: space-between; align-items: center;">
+    <h3>Customer Management</h3>
+
+    <form method="get" class="filter-bar">
+    <input type="text" name="name" placeholder="Name" value="{{ filters.name }}">
+    <input type="text" name="email" placeholder="Email" value="{{ filters.email }}">
+    <input type="text" name="phone" placeholder="Phone" value="{{ filters.phone }}">
+    <input type="text" name="country" placeholder="Country" value="{{ filters.country }}">
+    
+
+<select name="per_page" onchange="this.form.submit()">
+    <option value="5" {% if per_page == 5 %}selected{% endif %}>5</option>
+    <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+    <option value="25" {% if per_page == 25 %}selected{% endif %}>25</option>
+    <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
+</select>
+<input type="hidden" name="page" value="1">
+
+<button type="submit">Search</button>
+    <a href="/">Reset</a>
+
+</form>
+
+</div>
+
+</h1>
+    
+    <a href="{% url 'add_customer' %}" class="button add-btn">➕ Add New Customer</a>
+    
+    <h2>All Customers</h2>
+    
+    {% if customers %}
+        <table>
+            <thead>
+                <tr>
+                    
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Country</th>
+                    <th>Created At</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.phone }}</td>
+                    <td>{{ customer.country }}</td>
+                    <td>{{ customer.created_at|date:"d-m-y H:i" }}</td>
+                    <td>{{ customer.updated_at|date:"d-m-y H:i" }}</td>
+                    <td class="actions-cell">
+                        <a href="{% url 'edit_customer' customer.id %}" class="edit-btn">✏️ Edit</a>
+                        <a href="{% url 'delete_customer' customer.id %}" class="delete-btn" onclick="return confirm('Are you sure?');">🗑️ Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       <div style="margin-top:20px; text-align:center;">
+    {% if page_obj.has_previous %}
+        <a href="?{{ request.GET.urlencode|cut:'page=' }}&page=1">« First</a>
+        <a href="?{{ request.GET.urlencode|cut:'page=' }}&page={{ page_obj.previous_page_number }}">‹ Prev</a>
+    {% endif %}
+
+    <span style="margin:0 10px;">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    {% if page_obj.has_next %}
+        <a href="?{{ request.GET.urlencode|cut:'page=' }}&page={{ page_obj.next_page_number }}">Next ›</a>
+        <a href="?{{ request.GET.urlencode|cut:'page=' }}&page={{ page_obj.paginator.num_pages }}">Last »</a>
+    {% endif %}
+</div>
+
+
+    {% else %}
+        <p>No customers found. <a href="{% url 'add_customer' %}">Add one now!</a></p>
+    {% endif %}
+</body>
+</html>
+
+
