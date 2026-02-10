@@ -52,7 +52,7 @@ def add_customer(request):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         country = request.POST.get('country')
-
+       
         Customer.objects.create(
             name=name,
             email=email,
