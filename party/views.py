@@ -14,6 +14,7 @@ def add_customer(request):
         phone = request.POST.get('phone')
         email = request.POST.get('email')
         country = request.POST.get('country')
+        
         customer_type = request.POST.get('customer_type')
         interested_items = request.POST.getlist('interested_items')
 
