@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Customer</title>
+</head>
+<body>
+
+<h2>Add Customer</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Name"><br><br>
+    <input type="text" name="phone" placeholder="Phone"><br><br>
+    <input type="email" name="email" placeholder="Email"><br><br>
+    <input type="text" name="country" placeholder="Country"><br><br>
+
+    <h3>Customer Type</h3>
+    <input type="radio" name="customer_type" value="regular"> Primary
+    <input type="radio" name="customer_type" value="premium"> Secondary
+    <input type="radio" name="customer_type" value="vip"> All
+
+    <h3>Interested Items</h3>
+    <input type="checkbox" name="interested_items" value="lights"> Con SSD
+    <input type="checkbox" name="interested_items" value="sound"> Con Cabinet
+    <input type="checkbox" name="interested_items" value="decoration"> Con graphic card
+    <input type="checkbox" name="interested_items" value="catering"> Con mmotherboard
+    <input type="checkbox" name="interested_items" value="camera"> Con camera
+
+    <br><br>
+    <button type="submit">Save Customer</button>
+
+</form>
+
+<br>
+<a href="{% url 'home' %}">Back to Home</a>
+
+</body>
+</html>
