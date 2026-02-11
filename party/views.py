@@ -31,4 +31,31 @@ def add_customer(request):
 
     return render(request, 'party/add_customer.html')
 
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Customer
+
+
+def edit_customer(request, id):
+    customer = get_object_or_404(Customer, id=id)
+
+    if request.method == "POST":
+        customer.name = request.POST.get('name')
+        customer.email = request.POST.get('email')
+        customer.phone = request.POST.get('phone')
+        customer.country = request.POST.get('country')
+        customer.customer_type = request.POST.get('customer_type')
+        customer.interested_items = request.POST.getlist('interested_items')
+
+        customer.save()
+        return redirect('home')
+
+    return render(request, 'party/edit_customer.html', {'customer': customer})
+
+
+def delete_customer(request, id):
+    customer = get_object_or_404(Customer, id=id)
+
+    customer.delete()
+    return redirect('home')
+
 

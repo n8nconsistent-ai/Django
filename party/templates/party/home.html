@@ -131,6 +131,8 @@
     <th>Country</th>
     <th>Type</th>
     <th>Interested Items</th>
+    <th>Actions</th>
+
 </tr>
 
 {% for customer in customers %}
@@ -144,6 +146,12 @@
         {% for item in customer.interested_items %}
             {{ item }},
         {% endfor %}
+    </td>
+
+    <!-- NEW COLUMN -->
+    <td>
+        <a href="{% url 'edit_customer' customer.id %}">✏️ Edit</a> |
+        <a href="{% url 'delete_customer' customer.id %}">🗑 Delete</a>
     </td>
 </tr>
 {% endfor %}

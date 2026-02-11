@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import home, add_customer
+from . import views
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('add/', add_customer, name='add_customer'),
+    path('', views.home, name='home'),
+    path('add/', views.add_customer, name='add_customer'),
+    path('edit/<int:id>/', views.edit_customer, name='edit_customer'),
+    path('delete/<int:id>/', views.delete_customer, name='delete_customer'),
 ]
