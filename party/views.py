@@ -3,7 +3,7 @@ from .models import Customer
 
 
 def home(request):
-    customers = Customer.objects.all().order_by('-id')
+    customers = Customer.objects.filter(is_deleted=False).order_by('-id')
     return render(request, 'party/home.html', {'customers': customers})
 
 
@@ -54,6 +54,10 @@ def edit_customer(request, id):
 
 def delete_customer(request, id):
     customer = get_object_or_404(Customer, id=id)
+    customer.is_deleted = True
+    customer.save()
+    return redirect('home')
+
 
     customer.delete()
     return redirect('home')
