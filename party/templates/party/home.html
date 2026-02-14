@@ -150,9 +150,16 @@
 
     <!-- NEW COLUMN -->
     <td>
-        <a href="{% url 'edit_customer' customer.id %}">✏️ Edit</a> |
-        <a href="{% url 'delete_customer' customer.id %}">🗑 Delete</a>
-    </td>
+    <a href="{% url 'edit_customer' customer.id %}">✏️ Edit</a> |
+
+    <a href="{% url 'disable_customer' customer.id %}">🚫 Disable</a> |
+
+    <a href="{% url 'hard_delete_customer' customer.id %}"
+       onclick="return confirm('Are you sure you want to permanently delete this customer?');">
+       🗑 Delete
+    </a>
+</td>
+
 </tr>
 {% endfor %}
 
